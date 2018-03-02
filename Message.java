@@ -119,4 +119,14 @@ public class Message {
     public String getText(){
 	return text;
     }
+    public String getIdSenderFirst(){
+	return sender + receiver + dateTime;
+    }
+    public String getIdReceiverFirst(){
+	return receiver + sender + dateTime;
+    }
+    
+    public static void main(String args[]){
+	System.out.print(new TNode("034553", 76, null ,null ,null));
+    }
 }

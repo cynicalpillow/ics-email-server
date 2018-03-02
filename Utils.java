@@ -30,6 +30,20 @@ public class Utils {
 	return "" + (char)(num >> 56) +
 		    (char)((num & 0xFF000000000000L) >> 48) + 
 		    (char)((num & 0xFF0000000000L) >> 40) +
-		    (char)
+		    (char)((num & 0xFF00000000L) >> 32) +
+		    (char)((num & 0xFF000000L) >> 24) +
+		    (char)((num & 0xFF0000L) >> 16) +
+		    (char)((num & 0xFF00L) >> 8) + 
+		    (char)((num & 0xFFL));
+    }
+    public static long bytesStrToLong(String str){
+	return ((long) (str.charAt(0)) << 56) |
+	       ((long) (str.charAt(1)) << 48) |
+	       ((long) (str.charAt(2)) << 40) |
+	       ((long) (str.charAt(3)) << 32) |
+	       ((long) (str.charAt(4)) << 24) |
+	       ((long) (str.charAt(5)) << 16) |
+	       ((long) (str.charAt(6)) << 8) |
+	       ((long) (str.charAt(7)));
     }
 }

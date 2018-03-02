@@ -4,7 +4,7 @@ public class Init {
 	if(error == Globals.PROCESS_OK){
 	    error = FileIO.retrieveAvailableList(Globals.AVAILABLE_LIST_FILE);
 	    if(error == Globals.PROCESS_OK){
-	    
+		
 	    } else {
 		Error.report(2);
 	    }

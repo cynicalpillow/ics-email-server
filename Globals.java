@@ -49,4 +49,10 @@ public class Globals {
     public static final char SERVER_SHUTDOWN = 'Q';
     
     public static final int INT_LEN = 4;
+    
+    public static Tree senderIndex = null;
+    public static Tree receiverIndex = null;
+    
+    public static final int SENDER_ID = 0;
+    public static final int RECEIVER_ID = 1;
 }
