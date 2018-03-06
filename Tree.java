@@ -67,6 +67,45 @@ public class Tree {
 	    return null;
 	}
     }
+    public TNode findNode(String partialKey, int where){
+	if(partialKey.length() == Globals.IDENTIFICATION_LEN){
+	    return findNode(partialKey);
+	} else if(root == null){
+	    return null;
+	}
+	int n = partialKey.length();
+	if(partialKey.compareTo(root.getId().substring(0, n)) < 0){
+	    Tree t = new Tree(root.getLeft());
+	    return t.findNode(partialKey, where);
+	} else if(partialKey.compareTo(root.getId().substring(0, n)) > 0){
+	    Tree t = new Tree(root.getRight());
+	    return t.findNode(partialKey, where);
+	} else {
+	    TNode p = root;
+	    if(where == 0){
+		TNode q = p.getLeft();
+		while(q != null){
+		    if(q.getId().substring(0, n).equals(partialKey)){
+			p = q;
+			q = q.getLeft();
+		    } else {
+			q = q.getRight();
+		    }
+		}
+	    } else {
+		TNode q = p.getRight();
+		while(q != null){
+		    if(q.getId().substring(0, n).equals(partialKey)){
+			p = q;
+			q = q.getRight();
+		    } else {
+			q = q.getLeft();
+		    }
+		}
+	    }
+	    return p;
+	}
+    }
     public void printTree(int level){
 	if(root != null){
 	    Tree t = new Tree(root.getLeft());
@@ -99,9 +138,9 @@ public class Tree {
     }
     public static void main(String args[]){
 	Tree t = new Tree();
-	t.buildFromMessagesFile(Globals.SENDER_ID);
-	t.printTree();
-	/*t.insertNode(new TNode("034", 5));
+	//t.buildFromMessagesFile(Globals.SENDER_ID);
+	//t.printTree();
+	t.insertNode(new TNode("034", 5));
 	t.insertNode(new TNode("023", 76));
 	t.insertNode(new TNode("164", 12));
 	t.insertNode(new TNode("115", 30));
@@ -113,7 +152,8 @@ public class Tree {
 	t.insertNode(new TNode("170", 12));
 	t.insertNode(new TNode("120", 12));
 	
-	t.printTree(0);*/
+	t.printTree(0);
+	System.out.println(t.findNode("1", 1));
 	/*TNode n;
 	Tree test6 = new Tree();
 	for(int i = 0; i < 500; i++){

@@ -4,7 +4,8 @@ public class Init {
 	if(error == Globals.PROCESS_OK){
 	    error = FileIO.retrieveAvailableList(Globals.AVAILABLE_LIST_FILE);
 	    if(error == Globals.PROCESS_OK){
-		
+		Globals.senderIndex = new Tree();
+		Globals.senderIndex.buildFromMessagesFile(Globals.SENDER_ID);
 	    } else {
 		Error.report(2);
 	    }
