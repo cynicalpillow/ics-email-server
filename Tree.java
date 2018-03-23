@@ -1,3 +1,4 @@
+import java.io.*;
 public class Tree {
     private TNode root = null;
     
@@ -110,12 +111,66 @@ public class Tree {
 	if(root != null){
 	    Tree t = new Tree(root.getLeft());
 	    t.printTree(level+1);
-	    System.out.println("Id: " + root.getId() + " in level " + level);
+	    System.out.println(root + " in level " + level);
 	    t = new Tree(root.getRight());
 	    t.printTree(level+1);
 	}
     }
-    
+    public void breadthFirstRetrieve(String fileName){
+	try {
+	    RandomAccessFile f = new RandomAccessFile(fileName, "rw");
+	    int nodes = (int) (f.length() / (Globals.IDENTIFICATION_LEN + Globals.INT_LEN));
+	    TNode p = null;
+	    byte[] identification = new byte[Globals.IDENTIFICATION_LEN];
+	    String identificationString = Globals.STR_NULL;
+	    for(int i = 0; i < nodes; i++){
+		identificationString = Globals.STR_NULL;
+		f.read(identification);
+		for(int j = 0; j < identification.length; j++){
+		    identificationString = identificationString + (char) identification[j];
+		}
+		p = new TNode(identificationString, f.readInt(), null, null, null);
+		this.insertNode(p);
+	    }
+	    f.close();
+	} catch (IOException e){
+	    System.out.println("***Error: Unable to retrieve tree file " + fileName);
+	}
+    }
+    public void breadthFirstSave(String fileName){
+	try {
+	    RandomAccessFile f = new RandomAccessFile(fileName, "rw");
+	    f.setLength(0);
+	    for(int i = 0; i < height(); i++)
+		writeLevel(i, f);
+	    f.close();
+	} catch (IOException e){
+	    System.out.println(e);
+	}
+    }
+    public void writeLevel(int level, RandomAccessFile f){
+	if(level == 0){
+	    try {
+		if(root != null){
+		    f.write(root.getId().getBytes());
+		    f.writeInt(root.getRecordNumber());
+		}
+	    } catch (IOException e){
+		System.out.println(e);
+	    }
+	} else if(root != null){
+	    Tree tree = new Tree(root.getLeft());
+	    tree.writeLevel(level-1, f);
+	    tree = new Tree(root.getRight());
+	    tree.writeLevel(level-1, f);
+	}
+    }
+    public int height(){
+	if(root == null)return 0;
+	Tree tree = new Tree(root.getLeft());
+	Tree tree2 = new Tree(root.getRight());
+	return Math.max(tree.height()+1, tree2.height()+1);
+    }
     public void buildFromMessagesFile(int whatId){
 	Record record = new Record();
 	for(int recordNumber = 0; recordNumber < Globals.totalRecordsInMessageFile; recordNumber++){
@@ -140,20 +195,19 @@ public class Tree {
 	Tree t = new Tree();
 	//t.buildFromMessagesFile(Globals.SENDER_ID);
 	//t.printTree();
-	t.insertNode(new TNode("034", 5));
-	t.insertNode(new TNode("023", 76));
-	t.insertNode(new TNode("164", 12));
-	t.insertNode(new TNode("115", 30));
-	t.insertNode(new TNode("137", 12));
-	t.insertNode(new TNode("151", 12));
-	t.insertNode(new TNode("128", 12));
-	t.insertNode(new TNode("172", 12));
-	t.insertNode(new TNode("004", 10));
-	t.insertNode(new TNode("170", 12));
-	t.insertNode(new TNode("120", 12));
-	
-	t.printTree(0);
-	System.out.println(t.findNode("1", 1));
+	for(int i = 0; i < 50000; i++){
+	    int key = (int)(Math.random()*1000000000);
+	    t.insertNode(new TNode(Utils.leftPad(""+key, 5, '0'), i));
+	}
+	t.insertNode(new TNode(Utils.leftPad("12300", 5, '0'), 100));
+	System.out.println(t.findNode("123", 0));
+	System.out.println(t.height());
+	Tree x = new Tree();
+	x.insertNode(new TNode("27", 1));
+	x.insertNode(new TNode("19", 1));
+	x.insertNode(new TNode("30", 1));
+	x.insertNode(new TNode("32", 1));
+	System.out.println(x.height());
 	/*TNode n;
 	Tree test6 = new Tree();
 	for(int i = 0; i < 500; i++){
