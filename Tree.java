@@ -191,23 +191,98 @@ public class Tree {
 	    }
 	}
     }
+    public void setParentsChildLink(TNode p, TNode q) {
+	TNode parent = p.getParent();
+	if (p == parent.getRight()) {
+	    parent.setRight(q);
+	} else if (p == parent.getLeft()) {
+	    parent.setLeft(q);
+	}
+    }
+    public TNode getRightMostNode(TNode curr){
+	if(curr.getRight() == null)return curr;
+	return getRightMostNode(curr.getRight());
+    }
+    public void deleteNode(TNode p) {
+	if (p.isLeaf()) {
+	    if (p == root) {
+		root = null;
+	    } else {
+		setParentsChildLink(p, null);
+	    }
+	} else if (p.getLeft() == null || p.getRight() == null) {
+	    TNode q = null;
+	    if (p.getLeft() != null) q = p.getLeft();
+	    else if (p.getRight() != null) q = p.getRight();
+
+	    if (p == root) root = q;
+	    else setParentsChildLink(p, q);
+
+	    q.setParent(p.getParent());
+	} else {
+	    TNode q = p.getLeft();
+	    if(q.getRight() == null){
+		//Case 4, 5a
+		if(p == root){
+		    root = q;
+		} else {
+		    setParentsChildLink(p, q);
+		}
+
+		q.setParent(p.getParent());
+		q.setRight(p.getRight());
+		q.getRight().setParent(q);
+	    } else {
+		//Case 5b, 5c
+		q = getRightMostNode(q);
+		q.getParent().setRight(q.getLeft());
+		if(q.getLeft() != null){
+		    q.getLeft().setParent(q.getParent());
+		}
+
+		if(p == root)
+		    root = q;
+		else
+		    setParentsChildLink(p, q);
+
+		q.setParent(p.getParent());
+		q.setLeft(p.getLeft());
+		p.getLeft().setParent(q);
+		q.setRight(p.getRight());
+		p.getRight().setParent(q);
+
+	    }
+	}
+
+	p.setLeft(null);
+	p.setRight(null);
+	p.setParent(null);
+	p = null;
+    }
     public static void main(String args[]){
 	Tree t = new Tree();
 	//t.buildFromMessagesFile(Globals.SENDER_ID);
 	//t.printTree();
-	for(int i = 0; i < 50000; i++){
-	    int key = (int)(Math.random()*1000000000);
-	    t.insertNode(new TNode(Utils.leftPad(""+key, 5, '0'), i));
-	}
 	t.insertNode(new TNode(Utils.leftPad("12300", 5, '0'), 100));
 	System.out.println(t.findNode("123", 0));
 	System.out.println(t.height());
 	Tree x = new Tree();
+	TNode node = new TNode("19", 1);
 	x.insertNode(new TNode("27", 1));
-	x.insertNode(new TNode("19", 1));
+	x.insertNode(node);
+	x.insertNode(new TNode("14", 1));
+	x.insertNode(new TNode("15", 1));
+	x.insertNode(new TNode("13", 1));
+	x.insertNode(new TNode("16", 1));
+	x.insertNode(new TNode("20", 1));
+	x.insertNode(new TNode("22", 1));
+	x.insertNode(new TNode("21", 1));
 	x.insertNode(new TNode("30", 1));
 	x.insertNode(new TNode("32", 1));
-	System.out.println(x.height());
+	x.printTree(1);
+	System.out.println();
+	x.deleteNode(node);
+	x.printTree(1);
 	/*TNode n;
 	Tree test6 = new Tree();
 	for(int i = 0; i < 500; i++){

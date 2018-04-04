@@ -31,7 +31,7 @@ public class Message {
 	}
     }
     public int writeToMessagesFile(){
-	String text = this.text;
+	String text = getMessage();
 	int startRecordSpot = -1;
 	int nextRecordNumber = -1;
 	int recordNumber = -1;

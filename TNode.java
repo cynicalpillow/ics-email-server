@@ -57,6 +57,9 @@ public class TNode {
     public int getRecordNumber(){
 	return recordNumber;
     }
+    public boolean isLeaf(){
+	return left == null && right == null;
+    }
     public String toString(){
 	return "Id: " + identification + " Record number: " + recordNumber;
     }
