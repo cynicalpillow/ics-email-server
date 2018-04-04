@@ -197,6 +197,8 @@ public class Tree {
 	    parent.setRight(q);
 	} else if (p.getId().compareTo(parent.getId()) < 0) {
 	    parent.setLeft(q);
+	} else {
+	    System.out.println("Error in deleting root setting a parents child link");
 	}
     }
     public TNode getRightMostNode(TNode curr){
