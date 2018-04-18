@@ -14,6 +14,10 @@ public class Tree {
     public void setRoot(TNode r){
 	root = r;
     }
+    public void updateHeight(TNode root){
+	if(root.getLeft() != null)root.setHeight(Math.max(root.getLeft().getHeight()+1, root.getHeight()));
+	if(root.getRight() != null)root.setHeight(Math.max(root.getRight().getHeight()+1, root.getHeight()));
+    }
     public void insertNode(TNode t){
 	if(root == null){
 	    root = t;
@@ -36,12 +40,13 @@ public class Tree {
 	} else {
 	    System.out.println("Attempting to insert an identification that already exists in tree");
 	}
+	updateHeight(root);
     }
     public void printTree() {
 	if(root != null){
 	    Tree t = new Tree(root.getLeft());
 	    t.printTree();
-	    System.out.println(root);
+	    System.out.println(root + " with height " + root.getHeight());
 	    t = new Tree(root.getRight());
 	    t.printTree();
 	}
@@ -268,7 +273,7 @@ public class Tree {
 	Tree t = new Tree();
 	//t.buildFromMessagesFile(Globals.SENDER_ID);
 	//t.printTree();
-	t.insertNode(new TNode(Utils.leftPad("12300", 5, '0'), 100));
+	/*t.insertNode(new TNode(Utils.leftPad("12300", 5, '0'), 100));
 	System.out.println(t.findNode("123", 0));
 	System.out.println(t.height());
 	Tree x = new Tree();
@@ -287,7 +292,7 @@ public class Tree {
 	x.printTree(1);
 	System.out.println();
 	x.deleteNode(node);
-	x.printTree(1);
+	x.printTree(1);*/
 	/*TNode n;
 	Tree test6 = new Tree();
 	for(int i = 0; i < 500; i++){
@@ -304,5 +309,13 @@ public class Tree {
 	    }
 	}
 	test6.printTree();*/
+	Tree x = new Tree();
+	x.insertNode(new TNode("20", 4));
+	x.insertNode(new TNode("30", 1));
+	x.insertNode(new TNode("08", 3));
+	x.insertNode(new TNode("04", 1));
+	x.insertNode(new TNode("10", 2));
+	x.insertNode(new TNode("15", 1));
+	x.printTree();
     }
 }

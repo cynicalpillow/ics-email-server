@@ -4,6 +4,7 @@ public class TNode {
     private TNode left = null;
     private TNode right = null;
     private TNode parent = null;
+    private int height = 1;
     
     public TNode() {
 	identification = "";
@@ -11,6 +12,7 @@ public class TNode {
 	left = null;
 	right = null;
 	parent = null;
+	height = 1;
     }
     
     public TNode(String i, int r, TNode l, TNode right, TNode p){
@@ -19,6 +21,7 @@ public class TNode {
 	left = l;
 	this.right = right;
 	parent = p;
+	height = 1;
     }
     public TNode(String i, int r){
 	left = null;
@@ -26,6 +29,7 @@ public class TNode {
 	parent = null;
 	identification = i;
 	recordNumber = r;
+	height = 1;
     }
     public TNode getLeft(){
 	return left;
@@ -35,6 +39,12 @@ public class TNode {
     }
     public TNode getParent(){
 	return parent;
+    }
+    public int getHeight(){
+	return height;
+    }
+    public void setHeight(int h){
+	height = h;
     }
     public void setLeft(TNode l){
 	left = l;
