@@ -42,6 +42,34 @@ public class Tree {
 	}
 	updateHeight(root);
     }
+    private TNode rightRotate(){
+	TNode p = root.getLeft();
+	p.setParent(root.getParent());
+	
+	root.setLeft(p.getRight());
+	
+	if(root.getLeft() != null)
+	    root.getLeft().setParent(root);
+	    
+	p.setRight(root);
+	p.getRight().setParent(p);
+	
+	return p;
+    }
+    private TNode leftRotate(){
+	TNode p = root.getRight();
+	p.setParent(root.getParent());
+	
+	root.setRight(p.getLeft());
+	
+	if(root.getRight() != null)
+	    root.getRight().setParent(root);
+	    
+	p.setLeft(root);
+	p.getLeft().setParent(p);
+	
+	return p;
+    }
     public void printTree() {
 	if(root != null){
 	    Tree t = new Tree(root.getLeft());
