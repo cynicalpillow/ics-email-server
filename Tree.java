@@ -14,11 +14,27 @@ public class Tree {
     public void setRoot(TNode r){
 	root = r;
     }
-    public void updateHeight(TNode root){
-	if(root.getLeft() != null)root.setHeight(Math.max(root.getLeft().getHeight()+1, root.getHeight()));
-	if(root.getRight() != null)root.setHeight(Math.max(root.getRight().getHeight()+1, root.getHeight()));
+    public void updateNodeHeight(TNode p){
+	int leftHeight = p.getLeft() != null ? p.getLeft().getHeight() : 0;
+	int rightHeight = p.getRight() != null ? p.getRight().getHeight() : 0;
+	p.setHeight(Math.max(leftHeight, rightHeight)+1);
     }
-    public void insertNode(TNode t){
+    public void updateTreeHeights(){
+	if(root.getLeft() != null){
+	    Tree leftTree = new Tree(root.getLeft());
+	    leftTree.updateTreeHeights();
+	}
+	if(root.getRight() != null){
+	    Tree rightTree = new Tree(root.getRight());
+	    rightTree.updateTreeHeights();
+	}
+	updateNodeHeight(root);
+    }
+    public void insertNode(TNode p){
+	insertNodeRec(p);
+	balance(p);
+    }
+    public void insertNodeRec(TNode t){
 	if(root == null){
 	    root = t;
 	} else if(t.getId().compareTo(root.getId()) < 0){
@@ -27,7 +43,7 @@ public class Tree {
 		t.setParent(root);
 	    } else {
 		Tree tr = new Tree(root.getLeft());
-		tr.insertNode(t);
+		tr.insertNodeRec(t);
 	    }
 	} else if(t.getId().compareTo(root.getId()) > 0){
 	    if(root.getRight() == null){
@@ -35,13 +51,107 @@ public class Tree {
 		t.setParent(root);
 	    } else {
 		Tree tr = new Tree(root.getRight());
-		tr.insertNode(t);
+		tr.insertNodeRec(t);
 	    }
 	} else {
 	    System.out.println("Attempting to insert an identification that already exists in tree");
 	}
-	updateHeight(root);
+	
+	updateNodeHeight(root);
     }
+    
+    private int balanceFactor() {
+	return ((root.getLeft()==null?0:root.getLeft().getHeight())-(root.getRight()==null?0:root.getRight().getHeight()));
+    }
+    // balance the tree starting at this according to AVL self-balancing algorithm
+    // if called after insertion, p is the node that has just been inserted
+    // if called after deletion, p will have to be one of these two:
+    //
+    //  1) a leaf that has been deleted: In the calling method, the passed 
+    //     parameter will still have the link information even if the node has been
+    //     deleted in deleteNode(); thus it can be safely passed into here
+    //  2) the node that has been shifted up and has taken q's place since the parent of this node may
+    //     experience unbalancing
+    //
+    //  It might be best to do the call to balance() from within the insertNode() and
+    //  the deleteNode() so that all this node information is available
+
+    private void balance(TNode p) { 
+	if (p != null) {
+	    TNode ancestor = p;
+	
+	    while (ancestor != null) {
+		Tree ancestorTree = new Tree(ancestor); 
+		if (ancestorTree.balanceFactor() == -2) {
+		    Tree rTree = new Tree(ancestorTree.root.getRight());                
+
+		    int rTreeBalanceFactor = rTree.balanceFactor();
+		    if (rTreeBalanceFactor == -1 || rTreeBalanceFactor == 0) { //0 happens in delete case 7a
+			if (ancestor == root)
+			    root = ancestorTree.leftRotate();
+			else { 
+
+			    // determine if the ancestor is a left or a right child
+
+			    if (ancestor.getParent().getLeft() == ancestor)
+				ancestor.getParent().setLeft(ancestorTree.leftRotate()); 
+			    else
+				ancestor.getParent().setRight(ancestorTree.leftRotate());
+			}
+		    }
+		    else if (rTreeBalanceFactor == 1 || rTreeBalanceFactor == 0) {
+			ancestor.setRight(rTree.rightRotate());
+			if (ancestor == root)
+			    root = ancestorTree.leftRotate();
+			else {
+
+			    // determine if the ancestor is a left or a right child
+
+			    if (ancestor.getParent().getLeft() == ancestor)
+				ancestor.getParent().setLeft(ancestorTree.leftRotate());
+			    else
+				ancestor.getParent().setRight(ancestorTree.leftRotate());
+			}
+		    }
+		}
+		else if (ancestorTree.balanceFactor() == 2) {
+		    Tree lTree = new Tree(ancestorTree.root.getLeft());
+
+		    int lTreeBalanceFactor = lTree.balanceFactor();
+		    if (lTreeBalanceFactor == 1 || lTreeBalanceFactor == 0) { // 0 this symmetrical case of 7a does not happen. it's here to make the method symmetric and possible future optimization
+		       if (ancestor == root)
+			   root = ancestorTree.rightRotate();
+		       else {
+
+			   // determine if the ancestor is a left or a right child
+
+			   if (ancestor.getParent().getLeft() == ancestor)
+			       ancestor.getParent().setLeft(ancestorTree.rightRotate());
+			   else
+			       ancestor.getParent().setRight(ancestorTree.rightRotate());
+		       }
+		    }
+		    else if (lTreeBalanceFactor == -1 || lTreeBalanceFactor == 0) {
+			System.out.println("REACHED");
+			ancestor.setLeft(lTree.leftRotate());
+			if (ancestor == root)
+			    root = ancestorTree.rightRotate();
+			else {
+
+			    // determine if the ancestor is a left or a right child
+
+			    if (ancestor.getParent().getLeft() == ancestor)
+				ancestor.getParent().setLeft(ancestorTree.rightRotate());
+			    else
+				ancestor.getParent().setRight(ancestorTree.rightRotate());
+			}
+		    }
+		}
+		ancestor = ancestor.getParent(); // ancestor may have changed in rotation. ancestor keeps moving up anyway and will reach the null of the root's parent
+	    }
+	}
+    }
+    
     private TNode rightRotate(){
 	TNode p = root.getLeft();
 	p.setParent(root.getParent());
@@ -53,6 +163,12 @@ public class Tree {
 	    
 	p.setRight(root);
 	p.getRight().setParent(p);
+	Tree tree = new Tree(p);
+	tree.updateTreeHeights();
+	
+	for(TNode q = p; q != null; q = q.getParent()){
+	    updateNodeHeight(q);
+	}
 	
 	return p;
     }
@@ -67,6 +183,12 @@ public class Tree {
 	    
 	p.setLeft(root);
 	p.getLeft().setParent(p);
+	Tree tree = new Tree(p);
+	tree.updateTreeHeights();
+	
+	for(TNode q = p; q != null; q = q.getParent()){
+	    updateNodeHeight(q);
+	}
 	
 	return p;
     }
@@ -144,7 +266,7 @@ public class Tree {
 	if(root != null){
 	    Tree t = new Tree(root.getLeft());
 	    t.printTree(level+1);
-	    System.out.println(root + " in level " + level);
+	    System.out.println(root + " in level " + level + " Height: " + root.getHeight());
 	    t = new Tree(root.getRight());
 	    t.printTree(level+1);
 	}
@@ -338,12 +460,13 @@ public class Tree {
 	}
 	test6.printTree();*/
 	Tree x = new Tree();
-	x.insertNode(new TNode("20", 4));
-	x.insertNode(new TNode("30", 1));
-	x.insertNode(new TNode("08", 3));
+	x.insertNode(new TNode("01", 4));
+	x.insertNode(new TNode("02", 1));
+	x.insertNode(new TNode("03", 3));
 	x.insertNode(new TNode("04", 1));
-	x.insertNode(new TNode("10", 2));
-	x.insertNode(new TNode("15", 1));
-	x.printTree();
+	x.insertNode(new TNode("05", 2));
+	x.insertNode(new TNode("06", 1));
+	x.insertNode(new TNode("07", 1));
+	x.printTree(0);
     }
 }
