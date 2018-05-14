@@ -83,13 +83,13 @@ public class Tree {
 	    while (ancestor != null) {
 		Tree ancestorTree = new Tree(ancestor); 
 		if (ancestorTree.balanceFactor() == -2) {
-		    Tree rTree = new Tree(ancestorTree.root.getRight());                
-
+		    Tree rTree = new Tree(ancestorTree.root.getRight()); 
 		    int rTreeBalanceFactor = rTree.balanceFactor();
 		    if (rTreeBalanceFactor == -1 || rTreeBalanceFactor == 0) { //0 happens in delete case 7a
-			if (ancestor == root)
+			if (ancestor == root){
 			    root = ancestorTree.leftRotate();
-			else { 
+			    updateTreeHeights();
+			} else { 
 
 			    // determine if the ancestor is a left or a right child
 
@@ -97,13 +97,20 @@ public class Tree {
 				ancestor.getParent().setLeft(ancestorTree.leftRotate()); 
 			    else
 				ancestor.getParent().setRight(ancestorTree.leftRotate());
+				
+			    ancestorTree.updateTreeHeights();
+			    for(TNode q = ancestor.getParent(); q != null; q = q.getParent()){
+				updateNodeHeight(q);
+			    }
 			}
 		    }
 		    else if (rTreeBalanceFactor == 1 || rTreeBalanceFactor == 0) {
 			ancestor.setRight(rTree.rightRotate());
-			if (ancestor == root)
+			rTree.updateTreeHeights();
+			if (ancestor == root){
 			    root = ancestorTree.leftRotate();
-			else {
+			    updateTreeHeights();
+			} else {
 
 			    // determine if the ancestor is a left or a right child
 
@@ -111,17 +118,22 @@ public class Tree {
 				ancestor.getParent().setLeft(ancestorTree.leftRotate());
 			    else
 				ancestor.getParent().setRight(ancestorTree.leftRotate());
+			
+			    ancestorTree.updateTreeHeights();
+			    for(TNode q = ancestor.getParent(); q != null; q = q.getParent()){
+				updateNodeHeight(q);
+			    }
 			}
 		    }
 		}
 		else if (ancestorTree.balanceFactor() == 2) {
 		    Tree lTree = new Tree(ancestorTree.root.getLeft());
-
 		    int lTreeBalanceFactor = lTree.balanceFactor();
 		    if (lTreeBalanceFactor == 1 || lTreeBalanceFactor == 0) { // 0 this symmetrical case of 7a does not happen. it's here to make the method symmetric and possible future optimization
-		       if (ancestor == root)
+		       if (ancestor == root){
 			   root = ancestorTree.rightRotate();
-		       else {
+			   updateTreeHeights();
+		       } else {
 
 			   // determine if the ancestor is a left or a right child
 
@@ -129,14 +141,20 @@ public class Tree {
 			       ancestor.getParent().setLeft(ancestorTree.rightRotate());
 			   else
 			       ancestor.getParent().setRight(ancestorTree.rightRotate());
+		       
+			   ancestorTree.updateTreeHeights();
+			   for(TNode q = ancestor.getParent(); q != null; q = q.getParent()){
+			       updateNodeHeight(q);
+			   }
 		       }
 		    }
 		    else if (lTreeBalanceFactor == -1 || lTreeBalanceFactor == 0) {
-			System.out.println("REACHED");
 			ancestor.setLeft(lTree.leftRotate());
-			if (ancestor == root)
+			lTree.updateTreeHeights();
+			if (ancestor == root){
 			    root = ancestorTree.rightRotate();
-			else {
+			    updateTreeHeights();
+			} else {
 
 			    // determine if the ancestor is a left or a right child
 
@@ -144,6 +162,11 @@ public class Tree {
 				ancestor.getParent().setLeft(ancestorTree.rightRotate());
 			    else
 				ancestor.getParent().setRight(ancestorTree.rightRotate());
+			
+			    ancestorTree.updateTreeHeights();
+			    for(TNode q = ancestor.getParent(); q != null; q = q.getParent()){
+				updateNodeHeight(q);
+			    }    
 			}
 		    }
 		}
@@ -163,12 +186,6 @@ public class Tree {
 	    
 	p.setRight(root);
 	p.getRight().setParent(p);
-	Tree tree = new Tree(p);
-	tree.updateTreeHeights();
-	
-	for(TNode q = p; q != null; q = q.getParent()){
-	    updateNodeHeight(q);
-	}
 	
 	return p;
     }
@@ -183,12 +200,6 @@ public class Tree {
 	    
 	p.setLeft(root);
 	p.getLeft().setParent(p);
-	Tree tree = new Tree(p);
-	tree.updateTreeHeights();
-	
-	for(TNode q = p; q != null; q = q.getParent()){
-	    updateNodeHeight(q);
-	}
 	
 	return p;
     }
@@ -460,13 +471,11 @@ public class Tree {
 	}
 	test6.printTree();*/
 	Tree x = new Tree();
-	x.insertNode(new TNode("01", 4));
+	x.insertNode(new TNode("00", 1));
+	x.insertNode(new TNode("01", 1));
 	x.insertNode(new TNode("02", 1));
-	x.insertNode(new TNode("03", 3));
+	x.insertNode(new TNode("03", 1));
 	x.insertNode(new TNode("04", 1));
-	x.insertNode(new TNode("05", 2));
-	x.insertNode(new TNode("06", 1));
-	x.insertNode(new TNode("07", 1));
 	x.printTree(0);
     }
 }

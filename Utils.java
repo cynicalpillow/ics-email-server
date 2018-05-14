@@ -46,4 +46,15 @@ public class Utils {
 	       ((long) (str.charAt(6)) << 8) |
 	       ((long) (str.charAt(7)));
     }
+    public static String intToBytesStr(int num){
+	return "" + (char)(num >> 24) +
+		    (char)((num & 0xFF0000) >> 16) +
+		    (char)((num & 0xFF00) >> 8) +
+		    (char)((num & 0xFF));
+    }
+    public static String setReceivingTime(String message){
+	return message.substring(0, Globals.DATE_TIME_POS) + 
+	       longToBytesStr(System.currentTimeMillis()) +
+	       message.substring(message.indexOf(Globals.FIRST_RECORD_MARKER));
+    }
 }
