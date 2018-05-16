@@ -11,7 +11,7 @@ public class Message {
 	text = null;
     }
     public Message(String text){
-	setText(text);
+	setMessage(text);
     }
     public void readFromMessagesFile(int recordNumber){
 	String data = "";
@@ -36,7 +36,7 @@ public class Message {
 	int nextRecordNumber = -1;
 	int recordNumber = -1;
 	Record record;
-	
+	System.out.println("SAVING: " + text);
 	while(text != ""){
 	    if(Globals.availableList.getHead() == null){
 		recordNumber = Globals.totalRecordsInMessageFile;

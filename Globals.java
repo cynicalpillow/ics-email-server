@@ -58,7 +58,7 @@ public class Globals {
     public static final int RECEIVER_ID = 1;
     
     //Network Constants
-    public static final String SERVER_IP_ADDRESS = "192.168.2.125";
+    public static final String SERVER_IP_ADDRESS = "10.206.137.37";
     public static String clientIPAddress = STR_NULL;
     public static final int PORT_NUMBER = 5000;
     public static final int TIME_OUT = 10000;

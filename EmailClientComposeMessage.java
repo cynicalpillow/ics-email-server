@@ -59,7 +59,7 @@ public class EmailClientComposeMessage implements ActionListener {
 	messageText.setFont(new Font("Courier New", Font.PLAIN, 14));
 	messageText.setLineWrap(true);
 	messageText.setWrapStyleWord(true);
-        messageTextScroll = new JScrollPane(messageText);
+	messageTextScroll = new JScrollPane(messageText);
 	messageTextScroll.setBorder(BorderFactory.createLineBorder(Color.blue));
 	panel2.add(messageTextScroll);
 	
@@ -102,7 +102,7 @@ public class EmailClientComposeMessage implements ActionListener {
        
 		    int errorCode = NetIO.sendRequest(entireMessage, Globals.SERVER_IP_ADDRESS);        
 		    if (errorCode == Globals.NET_OK) {
-			frame.dispose();
+			//frame.dispose();
 		    }
 		    else {
 			JOptionPane.showMessageDialog (null, 

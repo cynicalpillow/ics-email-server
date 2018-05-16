@@ -6,6 +6,8 @@ public class Init {
 	    if(error == Globals.PROCESS_OK){
 		Globals.senderIndex = new Tree();
 		Globals.senderIndex.buildFromMessagesFile(Globals.SENDER_ID);
+		Globals.receiverIndex = new Tree();
+		Globals.receiverIndex.buildFromMessagesFile(Globals.RECEIVER_ID);
 	    } else {
 		Error.report(2);
 	    }

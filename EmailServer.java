@@ -32,13 +32,16 @@ public class EmailServer{
 		serverCommand = request.charAt(0);
 		switch(serverCommand){
 		    case Globals.SEND_MESSAGE :
+			System.out.println(request);
 			request = Utils.setReceivingTime(request);
+			
 			message = new Message(request);
 			recordNumber = message.writeToMessagesFile();
 			    
 			identification = message.getIdSenderFirst();
 			p = new TNode(identification, recordNumber, null, null, null);
 			Globals.senderIndex.insertNode(p);
+			System.out.println("ID: " + identification);
 			    
 			identification = message.getIdReceiverFirst();
 			p = new TNode(identification, recordNumber, null, null, null);
