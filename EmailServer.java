@@ -30,6 +30,7 @@ public class EmailServer
 
 	error = Init.initializeSystem ();
 
+	System.out.println(NetIO.myIPAddress());
 	System.out.println ("Currently saved messages in receiverIndex Tree: ");
 	printMessage (Globals.receiverIndex);
 	System.out.println ();

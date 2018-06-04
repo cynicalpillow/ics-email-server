@@ -1,3 +1,4 @@
+import java.util.*;
 public class Message {
     private String text = null;
     private String subject = null;
@@ -36,7 +37,6 @@ public class Message {
 	int nextRecordNumber = -1;
 	int recordNumber = -1;
 	Record record;
-	System.out.println("SAVING: " + text);
 	while(text != ""){
 	    if(Globals.availableList.getHead() == null){
 		recordNumber = Globals.totalRecordsInMessageFile;
@@ -69,10 +69,13 @@ public class Message {
 	return startRecordSpot;
     }
     public String toString(){
+    
+	Date date = new Date(Utils.bytesStrToLong(dateTime));
+    
 	return "Command     : " + command + "\n" +
 	       "Sender      : " + sender + "\n" +
 	       "Receiver    : " + receiver + "\n" +
-	       "Date/Time   : " + dateTime + "\n" +
+	       "Date/Time   : " + date + "\n" +
 	       "Marker      : " + marker + "\n" +
 	       "Subject     : " + subject + "\n" +
 	       "EOS Marker  : " + eosMarker + "\n" +
@@ -124,9 +127,5 @@ public class Message {
     }
     public String getIdReceiverFirst(){
 	return receiver + sender + dateTime;
-    }
-    
-    public static void main(String args[]){
-	System.out.print(new TNode("034553", 76, null ,null ,null));
     }
 }

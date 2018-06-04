@@ -126,7 +126,10 @@ public class EmailClientComposeMessage implements ActionListener {
 	    }
 	}
 	else if (buttonPressed == cancel) {
-	    frame.dispose();
+	    receiver.setText("");
+	    subject.setText("");
+	    messageText.setText("");
+	    //frame.dispose();
 	}
     }
    
