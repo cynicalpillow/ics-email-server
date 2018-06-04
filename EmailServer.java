@@ -87,6 +87,16 @@ public class EmailServer
 			Globals.transmissionString = Globals.transmissionString + Utils.intToBytesStr(Globals.END_OF_MESSAGES_TRANSMISSION);
 			error = NetIO.sendRequest(Globals.transmissionString, Globals.clientIPAddress);
 			Globals.transmissionString = Globals.STR_NULL;
+		    case Globals.OUT_BOX:
+			identification = request.substring(Globals.CLIENT_POS);
+			
+			p = Globals.senderIndex.findNode(identification, 0);
+			q = Globals.senderIndex.findNode(identification, 1);
+			
+			Globals.senderIndex.prepareTransmissionString(p, q);
+			Globals.transmissionString = Globals.transmissionString + Utils.intToBytesStr(Globals.END_OF_MESSAGES_TRANSMISSION);
+			error = NetIO.sendRequest(Globals.transmissionString, Globals.clientIPAddress);
+			Globals.transmissionString = Globals.STR_NULL;
 		    default:
 			System.out.println ("Unknown request: " + request);
 			break;
