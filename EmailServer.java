@@ -51,6 +51,7 @@ public class EmailServer
 		System.out.println ("Waiting...");
 		String request = NetIO.receiveRequest ();
 		serverCommand = request.charAt (0);
+		System.out.println(serverCommand + " " + request);
 		switch (serverCommand)
 		{
 		    case Globals.SEND_MESSAGE:
@@ -87,16 +88,7 @@ public class EmailServer
 			Globals.transmissionString = Globals.transmissionString + Utils.intToBytesStr(Globals.END_OF_MESSAGES_TRANSMISSION);
 			error = NetIO.sendRequest(Globals.transmissionString, Globals.clientIPAddress);
 			Globals.transmissionString = Globals.STR_NULL;
-		    case Globals.OUT_BOX:
-			identification = request.substring(Globals.CLIENT_POS);
-			
-			p = Globals.senderIndex.findNode(identification, 0);
-			q = Globals.senderIndex.findNode(identification, 1);
-			
-			Globals.senderIndex.prepareTransmissionString(p, q);
-			Globals.transmissionString = Globals.transmissionString + Utils.intToBytesStr(Globals.END_OF_MESSAGES_TRANSMISSION);
-			error = NetIO.sendRequest(Globals.transmissionString, Globals.clientIPAddress);
-			Globals.transmissionString = Globals.STR_NULL;
+			break;
 		    default:
 			System.out.println ("Unknown request: " + request);
 			break;

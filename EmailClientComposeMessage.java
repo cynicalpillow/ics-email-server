@@ -102,7 +102,7 @@ public class EmailClientComposeMessage implements ActionListener {
        
 		    int errorCode = NetIO.sendRequest(entireMessage, Globals.SERVER_IP_ADDRESS);        
 		    if (errorCode == Globals.NET_OK) {
-			//frame.dispose();
+			frame.dispose();
 		    }
 		    else {
 			JOptionPane.showMessageDialog (null, 
@@ -129,7 +129,7 @@ public class EmailClientComposeMessage implements ActionListener {
 	    receiver.setText("");
 	    subject.setText("");
 	    messageText.setText("");
-	    //frame.dispose();
+	    frame.dispose();
 	}
     }
    

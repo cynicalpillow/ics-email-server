@@ -59,7 +59,7 @@ public class Globals
     public static final int RECEIVER_ID = 1;
 
     //Network Constants
-    public static final String SERVER_IP_ADDRESS = "10.206.137.20";
+    public static final String SERVER_IP_ADDRESS = "10.206.137.59";
     public static String clientIPAddress = STR_NULL;
     public static final int PORT_NUMBER = 5000;
     public static final int TIME_OUT = 10000;
@@ -75,4 +75,9 @@ public class Globals
     public static String transmissionString = STR_NULL;
     
     public static final int CLIENT_POS = COMMAND_POS + COMMAND_LEN;
+    
+    //Client variables
+    public static final int MAX_CLIENT_MESSAGES = 500;
+    public static final String EMPTY_CLIENT_MESSAGE = STR_NULL;
+    public static String[] boxMessages = new String[MAX_CLIENT_MESSAGES];
 }
